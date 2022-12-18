@@ -1,25 +1,56 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, BrowserRouter, Route as AppRoute } from "react-router-dom";
 
-function App() {
+import { Suspense } from "react";
+import { ThemeProvider } from "styled-components";
+import { Provider } from "react-redux";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ROUTES } from "./routes/constants";
+import Global from "./globalStyles";
+
+import theme from "./globalStyles/theme";
+import { ToastContainer } from "react-toastify";
+import store from "./redux/store";
+import Loader from "./components/loader";
+
+const client = new QueryClient();
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Suspense fallback={<Loader type="bubbles" color={theme.colors.primary} />}>
+      <Provider store={store}>
+        <QueryClientProvider client={client}>
+          <ToastContainer />
+          <ThemeProvider theme={theme}>
+            <Global />
+            <BrowserRouter>
+              <Routes>
+                {ROUTES.map(
+                  ({
+                    route: Route,
+                    component: Component,
+                    path,
+                    exact,
+                    ...props
+                  }) => (
+                    <AppRoute
+                      key={path}
+                      path={path}
+                      exact={exact}
+                      element={
+                        <Route>
+                          <Component {...props} />
+                        </Route>
+                      }
+                    />
+                  )
+                )}
+              </Routes>
+            </BrowserRouter>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </Provider>
+    </Suspense>
   );
-}
+};
 
 export default App;
