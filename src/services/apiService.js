@@ -42,6 +42,13 @@ class ApiService extends BaseService {
   getParticularExperience(id) {
     return this.get(`/experience/${id}`);
   }
+
+  addPlaceInMap(data) {
+    return this.post(`/mapLocation/`, data);
+  }
+  getMapLocations() {
+    return this.get(`/mapLocation/`);
+  }
 }
 
 export default new ApiService();

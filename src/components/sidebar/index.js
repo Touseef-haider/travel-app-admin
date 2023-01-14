@@ -5,7 +5,7 @@ const SideBar = () => {
   return (
     <S.SideBar>
       <NavLink to="/alerts" title="Alerts">
-        Alerts
+        add Places
       </NavLink>
     </S.SideBar>
   );

@@ -52,7 +52,9 @@ const Home = () => {
                   <label htmlFor="p" className="label">
                     description:
                   </label>
-                  <p>{alert?.description}</p>
+                  <p
+                    dangerouslySetInnerHTML={{ __html: alert?.description }}
+                  ></p>
                   <label htmlFor="p" className="label">
                     Category Name:
                   </label>

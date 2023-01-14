@@ -4,7 +4,7 @@ import Auth from "./auth";
 
 const Login = lazy(() => import("../pages/login"));
 const Home = lazy(() => import("../pages/home"));
-const Alert = lazy(() => import("../pages/alert"));
+const MapLocation = lazy(() => import("../pages/mapLocation"));
 const Account = lazy(() => import("../pages/account"));
 
 export const ROUTES = [
@@ -23,7 +23,7 @@ export const ROUTES = [
     route: Auth,
   },
   {
-    component: Alert,
+    component: MapLocation,
     exact: true,
     path: "/alerts",
     title: "Home",
