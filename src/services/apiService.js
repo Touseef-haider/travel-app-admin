@@ -46,8 +46,29 @@ class ApiService extends BaseService {
   addPlaceInMap(data) {
     return this.post(`/mapLocation/`, data);
   }
+
   getMapLocations() {
     return this.get(`/mapLocation/`);
+  }
+
+  addFile(file) {
+    return this.post("/upload", file);
+  }
+
+  getProvinces() {
+    return this.get("/province");
+  }
+
+  addProvince(data) {
+    return this.post("/province", data);
+  }
+
+  addCity(data) {
+    return this.put(`/province/city/${data?._id}`, data);
+  }
+
+  removeCity(data) {
+    return this.delete(`/province/city/${data?._id}/${data?.cityId}`, data);
   }
 }
 

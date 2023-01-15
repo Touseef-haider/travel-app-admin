@@ -8,12 +8,6 @@ const reset = css`
   applet,
   object,
   iframe,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
   p,
   blockquote,
   pre,
@@ -173,6 +167,9 @@ const reset = css`
     text-align: center;
   }
 
+  .m-40 {
+    margin: 40px 0;
+  }
   .display-none {
     display: none;
   }

@@ -9,7 +9,7 @@ const AuthLayout = ({ children, showFooter }) => {
       <AuthHeader />
       <div className="menu">
         <SideBar />
-        <div style={{ width: "80%" }}>{children}</div>
+        <div className="right-section">{children}</div>
       </div>
     </S.Layouts>
   );

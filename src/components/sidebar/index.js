@@ -4,9 +4,21 @@ import * as S from "./styled";
 const SideBar = () => {
   return (
     <S.SideBar>
-      <NavLink to="/alerts" title="Alerts">
-        add Places
-      </NavLink>
+      <div>
+        <NavLink to="/alerts" title="Alerts">
+          Add Places
+        </NavLink>
+      </div>
+      <div>
+        <NavLink to="/category" title="Category">
+          Add Category
+        </NavLink>
+      </div>
+      <div>
+        <NavLink to="/province" title="Province">
+          Add Province
+        </NavLink>
+      </div>
     </S.SideBar>
   );
 };
