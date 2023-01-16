@@ -44,11 +44,11 @@ class ApiService extends BaseService {
   }
 
   addPlaceInMap(data) {
-    return this.post(`/mapLocation/`, data);
+    return this.post(`/mapLocation`, data);
   }
 
   getMapLocations() {
-    return this.get(`/mapLocation/`);
+    return this.get(`/mapLocation`);
   }
 
   addFile(file) {
@@ -69,6 +69,38 @@ class ApiService extends BaseService {
 
   removeCity(data) {
     return this.delete(`/province/city/${data?._id}/${data?.cityId}`, data);
+  }
+
+  removeCategory(data) {
+    return this.delete(`/category/${data?._id}`, data);
+  }
+
+  getCategories() {
+    return this.get("/category");
+  }
+
+  addCategory(data) {
+    return this.post("/category", data);
+  }
+
+  updateCategory(data) {
+    return this.put(`/category/${data?._id}`, data);
+  }
+
+  getHotels() {
+    return this.get("/hotel");
+  }
+
+  addHotel(data) {
+    return this.post("/hotel", data);
+  }
+
+  updateHotel(data) {
+    return this.put(`/hotel/${data?._id}`, data);
+  }
+
+  removeHotel(data) {
+    return this.delete(`/hotel/${data?._id}`);
   }
 }
 

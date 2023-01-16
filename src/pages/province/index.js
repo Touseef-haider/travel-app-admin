@@ -66,20 +66,24 @@ const Province = () => {
 
   const { values, errors, handleChange, handleSubmit, resetForm } = formik;
 
+  let count = 0;
   const addCity = (city, _id) => {
-    addCityMutation.mutate(
-      {
-        city,
-        _id,
-      },
-      {
-        onSuccess: () => {
-          setInitialValues(initialState);
+    count++;
+    if (count === 1) {
+      addCityMutation.mutate(
+        {
+          city,
+          _id,
         },
-      }
-    );
+        {
+          onSuccess: () => {
+            setInitialValues(initialState);
+            count = 0;
+          },
+        }
+      );
+    }
   };
-  console.log(provinces);
   const handleRemoveCity = (id, cityId) => {
     removeCityMutation.mutate({ _id: id, cityId });
   };
@@ -109,6 +113,7 @@ const Province = () => {
                 onChange={handleChange}
                 error={errors.province}
                 placeholder="select province"
+                selectOption="select province"
                 name="province"
               />
               {values.province && (

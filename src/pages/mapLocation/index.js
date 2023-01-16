@@ -20,14 +20,18 @@ const initialState = {
   name: "",
   location: "",
   contact: "",
+  category: "",
   description: "",
   province: "",
   city: "",
+  hotels: [],
 };
 
-const Alert = () => {
+const MapLocation = () => {
   const [initialValues, setInitialValues] = useState(initialState);
-  const { data } = useQuery("getData", () => apiService.getMapLocations());
+  const { data, refetch } = useQuery("getData", () =>
+    apiService.getMapLocations()
+  );
   const [images, setImages] = useState([]);
   const fileRef = useRef(null);
 
@@ -50,6 +54,12 @@ const Alert = () => {
     apiService.getProvinces()
   );
 
+  const { data: categories } = useQuery("getCategories", () =>
+    apiService.getCategories()
+  );
+
+  const { data: hotels } = useQuery("getHotels", () => apiService.getHotels());
+
   const addPlaceMutation = useMutation(
     (data) => apiService.addPlaceInMap(data),
     {
@@ -57,7 +67,7 @@ const Alert = () => {
         console.log(data);
         toastify("success", data?.message);
         setImages([]);
-
+        refetch();
         setInitialValues(initialState);
       },
     }
@@ -69,9 +79,11 @@ const Alert = () => {
     name: yup.string().required("*name is required"),
     location: yup.string().required("*location is required"),
     contact: yup.number().required("*contact is required"),
+    category: yup.string().required("*category is required"),
     description: yup.string().required("*description is required"),
     province: yup.string().required("*province is required"),
     city: yup.string().required("*city is required"),
+    hotel: yup.string().required("*hotels is required"),
   });
 
   const formik = useFormik({
@@ -82,7 +94,12 @@ const Alert = () => {
     validateOnBlur: true,
     onSubmit: (data) => {
       console.log(data);
-      addPlaceMutation.mutate({ ...data, images });
+      addPlaceMutation.mutate({
+        ...data,
+        images,
+        hotels: [data?.hotel],
+        country: { province: data?.province, city: data?.city },
+      });
     },
   });
 
@@ -105,6 +122,7 @@ const Alert = () => {
     }
   };
 
+  console.log(data);
   return (
     <S.MapLocation>
       <AuthLayout showFooter>
@@ -152,34 +170,56 @@ const Alert = () => {
           />
 
           <Select
-            multiple={true}
-            error={values.province}
+            error={errors?.province}
             value={errors.province}
             onChange={handleChange}
-            options={provinces}
+            options={
+              Array.isArray(provinces) &&
+              provinces?.length > 0 &&
+              provinces?.map((p) => ({ value: p?._id, item: p?.name }))
+            }
             name="province"
             placeholder="select province"
+            selectOption="select province"
           />
 
-          {values.province && (
+          {values?.province && (
             <Select
-              multiple={true}
-              error={values.city}
-              value={errors.city}
+              error={errors.city}
+              selectOption="select city"
+              value={values.city}
               onChange={handleChange}
-              options={provinces?.filter((p) => p === values.province).cities}
+              options={
+                values.province &&
+                Array.isArray(provinces) &&
+                provinces?.length > 0 &&
+                provinces
+                  ?.find((p) => p?._id === values.province)
+                  ?.cities.map((c) => ({ value: c?.name, item: c?.name }))
+              }
               name="city"
               placeholder="select city"
             />
           )}
 
           <Select
-            multiple={true}
-            error={values.city}
-            value={errors.city}
+            error={errors.category}
+            value={values.category}
             onChange={handleChange}
-            name="city"
-            placeholder="select city"
+            name="category"
+            options={categories?.map((c) => ({ value: c?._id, item: c?.name }))}
+            placeholder="select category"
+            selectOption="select category"
+          />
+          <Select
+            // multiple={true}
+            error={errors.hotel}
+            value={values.hotel}
+            onChange={handleChange}
+            name="hotel"
+            options={hotels?.map((c) => ({ value: c?._id, item: c?.name }))}
+            placeholder="select hotel"
+            selectOption="select hotel"
           />
 
           <Quill
@@ -252,4 +292,4 @@ const Alert = () => {
   );
 };
 
-export default Alert;
+export default MapLocation;

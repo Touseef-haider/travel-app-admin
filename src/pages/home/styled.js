@@ -11,6 +11,5 @@ export const Home = styled.div`
     padding: 10px;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1) !important;
     margin: 10px;
-    /* position: relative; */
   }
 `;

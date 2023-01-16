@@ -10,6 +10,7 @@ const Select = ({
   name,
   props,
   multiple,
+  selectOption,
 }) => {
   return (
     <S.Select {...props}>
@@ -23,13 +24,15 @@ const Select = ({
         {...props}
       >
         <option value="" disabled selected>
-          Select province
+          {selectOption}
         </option>
-        {options?.map((opt) => (
-          <option key={opt?.item} value={opt?.value}>
-            {opt?.item}
-          </option>
-        ))}
+        {Array.isArray(options) &&
+          options?.length > 0 &&
+          options?.map((opt) => (
+            <option key={opt?.item} value={opt?.value}>
+              {opt?.item}
+            </option>
+          ))}
       </select>
       <small className="error">{error ? error : ""}</small>
     </S.Select>

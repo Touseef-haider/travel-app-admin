@@ -19,6 +19,11 @@ const SideBar = () => {
           Add Province
         </NavLink>
       </div>
+      <div>
+        <NavLink to="/hotel" title="Hotel">
+          Add Hotel
+        </NavLink>
+      </div>
     </S.SideBar>
   );
 };

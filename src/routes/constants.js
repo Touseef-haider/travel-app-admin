@@ -7,6 +7,7 @@ const Home = lazy(() => import("../pages/home"));
 const MapLocation = lazy(() => import("../pages/mapLocation"));
 const Province = lazy(() => import("../pages/province"));
 const Category = lazy(() => import("../pages/category"));
+const Hotel = lazy(() => import("../pages/hotel"));
 const Account = lazy(() => import("../pages/account"));
 
 export const ROUTES = [
@@ -43,6 +44,13 @@ export const ROUTES = [
     exact: true,
     path: "/province",
     title: "Province",
+    route: Auth,
+  },
+  {
+    component: Hotel,
+    exact: true,
+    path: "/hotel",
+    title: "Hotel",
     route: Auth,
   },
   {

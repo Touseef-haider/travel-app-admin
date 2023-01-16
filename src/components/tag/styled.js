@@ -10,7 +10,7 @@ export const Tag = styled.span`
   padding: 10px 30px;
   margin: 5px 15px;
   border-radius: 20px;
-  width: fit-content;
+  width: 100%;
   position: relative;
 
   &:hover::before {
@@ -18,7 +18,7 @@ export const Tag = styled.span`
   }
 
   &::before {
-    content: "double click to remove";
+    content: "";
     font-size: x-small;
     position: absolute;
     width: 100%;
@@ -27,7 +27,7 @@ export const Tag = styled.span`
     left: 50%;
     transform: translate(-50%, 0);
     visibility: hidden;
-    background-color: ${({ theme }) => theme.colors.grey};
+    /* background-color: ${({ theme }) => theme.colors.grey}; */
     padding: 5px;
     border-radius: 10px;
   }
