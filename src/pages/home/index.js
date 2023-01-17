@@ -15,7 +15,7 @@ const Home = () => {
     (data) => apiService.updateExperience(data),
     {
       onSuccess: (data) => {
-        // toastify("success", data?.message);
+        toastify("success", data?.message);
         refetch();
       },
     }

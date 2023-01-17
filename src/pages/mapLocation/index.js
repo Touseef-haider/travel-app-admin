@@ -56,6 +56,10 @@ const MapLocation = () => {
     apiService.getProvinces()
   );
 
+  const { data: accessibilities } = useQuery("getAccessibilites", () =>
+    apiService.getAccessibilities()
+  );
+
   const { data: categories } = useQuery("getCategories", () =>
     apiService.getCategories()
   );
@@ -66,10 +70,10 @@ const MapLocation = () => {
     (data) => apiService.addPlaceInMap(data),
     {
       onSuccess: (data) => {
-        console.log(data);
         toastify("success", data?.message);
         setImages([]);
         refetch();
+        resetForm();
         setInitialValues(initialState);
       },
     }
@@ -89,7 +93,6 @@ const MapLocation = () => {
     (data) => apiService.updatePlaceInMap(data),
     {
       onSuccess: (data) => {
-        console.log("-----------------------", data);
         toastify("success", data?.message);
         setImages([]);
         refetch();
@@ -109,7 +112,10 @@ const MapLocation = () => {
     description: yup.string().required("*description is required"),
     province: yup.string().required("*province is required"),
     city: yup.string().required("*city is required"),
-    hotel: yup.string().required("*hotels is required"),
+    accessibilities: yup.array(
+      yup.string().required("*accessibility is required")
+    ),
+    hotels: yup.array(yup.string().required("*hotel is required")),
   });
 
   const formik = useFormik({
@@ -119,12 +125,10 @@ const MapLocation = () => {
     validateOnChange: false,
     validateOnBlur: true,
     onSubmit: (data) => {
-      console.log(data);
       if (id) {
         updataPlaceMutation.mutate({
           ...data,
           images,
-          hotels: [data?.hotel],
           country: { province: data?.province, city: data?.city },
           _id: id,
         });
@@ -132,7 +136,6 @@ const MapLocation = () => {
         addPlaceMutation.mutate({
           ...data,
           images,
-          hotels: [data?.hotel],
           country: { province: data?.province, city: data?.city },
         });
       }
@@ -166,16 +169,23 @@ const MapLocation = () => {
   };
 
   const handleEdit = (data) => {
-    console.log(data);
     setFieldValue("lat", data?.lat);
     setFieldValue("lng", data?.lng);
     setFieldValue("name", data?.name);
     setFieldValue("location", data?.location);
+    setFieldValue("description", data?.description);
     setFieldValue("category", data?.category?._id);
     setFieldValue("province", data?.country?.province?._id);
     setFieldValue("contact", data?.contact);
+    setFieldValue(
+      "accessibilities",
+      data?.accessibilities?.map((a) => a?._id)
+    );
     setFieldValue("city", data?.country?.city);
-    setFieldValue("hotel", data?.hotels[0]?._id);
+    setFieldValue(
+      "hotels",
+      data?.hotels?.map((h) => h?._id)
+    );
     setImages(data?.images);
     setId(data?._id);
   };
@@ -183,6 +193,7 @@ const MapLocation = () => {
   const handleDeletePlace = (id) => {
     deletePlaceMutation.mutate({ _id: id });
   };
+
   return (
     <S.MapLocation>
       <AuthLayout showFooter>
@@ -231,7 +242,7 @@ const MapLocation = () => {
 
           <Select
             error={errors?.province}
-            value={errors.province}
+            value={values.province}
             onChange={handleChange}
             options={
               Array.isArray(provinces) &&
@@ -272,14 +283,27 @@ const MapLocation = () => {
             selectOption="select category"
           />
           <Select
-            // multiple={true}
-            error={errors.hotel}
-            value={values.hotel}
+            multiple={true}
+            error={errors.hotels}
+            value={values.hotels}
             onChange={handleChange}
-            name="hotel"
+            name="hotels"
             options={hotels?.map((c) => ({ value: c?._id, item: c?.name }))}
-            placeholder="select hotel"
-            selectOption="select hotel"
+            placeholder="select hotels"
+            selectOption="select hotels"
+          />
+          <Select
+            multiple={true}
+            error={errors.accessibilities}
+            value={values.accessibilities}
+            onChange={handleChange}
+            name="accessibilities"
+            options={accessibilities?.map((c) => ({
+              value: c?._id,
+              item: c?.via,
+            }))}
+            placeholder="select accessibilities"
+            selectOption="select accessibilities"
           />
 
           <Quill
@@ -385,7 +409,7 @@ const MapLocation = () => {
               </small>
               <br />
               <br />
-              <h4>Hotel</h4>
+              <h4>Hotels:</h4>
               <div className="hotel">
                 {l?.hotels?.map((h) => (
                   <div className="hotel-section">
@@ -408,6 +432,17 @@ const MapLocation = () => {
                         </>
                       ))}
                     </div>
+                  </div>
+                ))}
+              </div>
+              <h4>Accessibility:</h4>
+              <div className="hotel">
+                {l?.accessibilities?.map((h) => (
+                  <div className="hotel-section">
+                    <p>
+                      <span className="bold">accessible via: </span>
+                      {h?.via}
+                    </p>
                   </div>
                 ))}
               </div>

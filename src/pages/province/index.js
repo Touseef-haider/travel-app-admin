@@ -101,6 +101,10 @@ const Province = () => {
             name="name"
           />
           <Button hasBackground onClick={handleSubmit} title="add province" />
+
+          {provinces?.length > 0 && (
+            <small>Note: double click to remove a province</small>
+          )}
           {provinces?.length > 0 && (
             <div>
               <h4>Add city</h4>
@@ -133,6 +137,7 @@ const Province = () => {
               )}
             </div>
           )}
+
           {provinces?.map((p) => (
             <div className="m-40">
               <span>{p?.name}: </span>

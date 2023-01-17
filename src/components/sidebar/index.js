@@ -24,6 +24,11 @@ const SideBar = () => {
           Add Hotel
         </NavLink>
       </div>
+      <div>
+        <NavLink to="/accessibility" title="Accessibility">
+          Add Accessibility
+        </NavLink>
+      </div>
     </S.SideBar>
   );
 };

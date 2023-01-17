@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Input from "../../components/Input";
 import AuthLayout from "../../layouts/authLayout";
-import * as S from "./styled";
+import * as S from "../category/styled";
 import * as yup from "yup";
 import Edit from "../../assets/edit.svg";
 import { useFormik } from "formik";
@@ -11,26 +11,29 @@ import Button from "../../components/button";
 import toastify from "../../components/toast";
 
 const initialState = {
-  name: "",
+  via: "",
 };
-const Category = () => {
+const Accessibility = () => {
   const [initialValues] = useState(initialState);
   const [id, setId] = useState("");
 
-  const { data: categories, refetch } = useQuery("getCategories", () =>
-    apiService.getCategories()
+  const { data: accessibilities, refetch } = useQuery("getAccesibilities", () =>
+    apiService.getAccessibilities()
   );
 
-  const addCategory = useMutation((data) => apiService.addCategory(data), {
-    onSuccess: (data) => {
-      toastify("success", data?.message);
-      resetForm();
-      refetch();
-    },
-  });
+  const addAccessibility = useMutation(
+    (data) => apiService.addAccessibilities(data),
+    {
+      onSuccess: (data) => {
+        toastify("success", data?.message);
+        resetForm();
+        refetch();
+      },
+    }
+  );
 
-  const updateCategory = useMutation(
-    (data) => apiService.updateCategory(data),
+  const updateAccessibility = useMutation(
+    (data) => apiService.updateAccessibilities(data),
     {
       onSuccess: (data) => {
         toastify("success", data?.message);
@@ -41,8 +44,8 @@ const Category = () => {
     }
   );
 
-  const removeCategoryMutation = useMutation(
-    (data) => apiService.removeCategory(data),
+  const removeAccessibilityMutation = useMutation(
+    (data) => apiService.removeAccessibilities(data),
     {
       onSuccess: (data) => {
         toastify("success", data?.message);
@@ -51,7 +54,7 @@ const Category = () => {
     }
   );
   const schema = yup.object({
-    name: yup.string().required("*name is required"),
+    via: yup.string().required("*via is required"),
   });
 
   const formik = useFormik({
@@ -61,9 +64,9 @@ const Category = () => {
     validateOnChange: false,
     onSubmit: (data) => {
       if (id) {
-        updateCategory.mutate({ ...data, _id: id });
+        updateAccessibility.mutate({ ...data, _id: id });
       } else {
-        addCategory.mutate(data);
+        addAccessibility.mutate(data);
       }
     },
   });
@@ -77,46 +80,48 @@ const Category = () => {
     setFieldValue,
   } = formik;
 
-  const handleRemoveCategory = (id) => {
-    removeCategoryMutation.mutate({ _id: id });
+  const handleRemoveAccessibility = (id) => {
+    removeAccessibilityMutation.mutate({ _id: id });
   };
 
-  const handleEdit = (id, name) => {
-    setFieldValue("name", name);
+  const handleEdit = (id, via) => {
+    setFieldValue("via", via);
     setId(id);
   };
   return (
     <S.Category>
       <AuthLayout>
         <div className="section">
-          <h1>Category</h1>
+          <h1>Accessibility</h1>
           <Input
             type="text"
-            value={values.name}
-            error={errors.name}
-            placeholder="add category"
+            value={values.via}
+            error={errors.via}
+            placeholder="add vehicle accessibility like car etc."
             onChange={handleChange}
-            name="name"
+            name="via"
           />
+
           <Button
             hasBackground
             onClick={handleSubmit}
-            title={id ? "update category" : "add category"}
+            title={id ? "update accessibility" : "add accessibility"}
           />
 
-          {categories?.length > 0 && (
-            <small>Note: double click to remove a category</small>
+          {accessibilities?.length > 0 && (
+            <small>Note: double click to remove a accessibility</small>
           )}
+
           <div className="m-40 cat-section">
-            {categories?.map((p) => (
+            {accessibilities?.map((p) => (
               <div
                 className="card"
-                onDoubleClick={() => handleRemoveCategory(p?._id)}
+                onDoubleClick={() => handleRemoveAccessibility(p?._id)}
               >
-                <div>{p?.name}</div>
+                <div>{p?.via}</div>
                 <img
                   src={Edit}
-                  onClick={() => handleEdit(p?._id, p?.name)}
+                  onClick={() => handleEdit(p?._id, p?.via)}
                   width={20}
                   height={20}
                   alt="edit"
@@ -130,4 +135,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default Accessibility;

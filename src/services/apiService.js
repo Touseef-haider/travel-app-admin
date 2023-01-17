@@ -112,6 +112,22 @@ class ApiService extends BaseService {
   removeHotel(data) {
     return this.delete(`/hotel/${data?._id}`);
   }
+
+  removeAccessibilities(data) {
+    return this.delete(`/accessibility/${data?._id}`);
+  }
+
+  getAccessibilities() {
+    return this.get(`/accessibility`);
+  }
+
+  addAccessibilities(data) {
+    return this.post(`/accessibility`, data);
+  }
+
+  updateAccessibilities(data) {
+    return this.put(`/accessibility/${data?._id}`, data);
+  }
 }
 
 export default new ApiService();

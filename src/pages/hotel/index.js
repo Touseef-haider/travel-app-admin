@@ -198,6 +198,9 @@ const Hotel = () => {
             title={id ? "update hotel " : "add hotel "}
           />
 
+          {hotels?.length > 0 && (
+            <small>Note: double click to remove a hotel</small>
+          )}
           <div className="m-40 cat-section">
             {Array.isArray(hotels) &&
               hotels?.length > 0 &&
