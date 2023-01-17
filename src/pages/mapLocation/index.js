@@ -10,6 +10,7 @@ import { useMutation, useQuery } from "react-query";
 import apiService from "../../services/apiService";
 import toastify from "../../components/toast";
 import Delete from "../../assets/delete.svg";
+import Edit from "../../assets/edit.svg";
 
 import Quill from "../../components/quill";
 import Select from "../../components/select";
@@ -32,6 +33,7 @@ const MapLocation = () => {
   const { data, refetch } = useQuery("getData", () =>
     apiService.getMapLocations()
   );
+  const [id, setId] = useState("");
   const [images, setImages] = useState([]);
   const fileRef = useRef(null);
 
@@ -73,6 +75,30 @@ const MapLocation = () => {
     }
   );
 
+  const deletePlaceMutation = useMutation(
+    (data) => apiService.removePlaceInMap(data),
+    {
+      onSuccess: (data) => {
+        toastify("success", data?.message);
+        refetch();
+        setInitialValues(initialState);
+      },
+    }
+  );
+  const updataPlaceMutation = useMutation(
+    (data) => apiService.updatePlaceInMap(data),
+    {
+      onSuccess: (data) => {
+        console.log("-----------------------", data);
+        toastify("success", data?.message);
+        setImages([]);
+        refetch();
+        resetForm();
+        setInitialValues(initialState);
+      },
+    }
+  );
+
   const schema = yup.object({
     lat: yup.number().required("*lat is required"),
     lng: yup.number().required("*lng is required"),
@@ -94,16 +120,33 @@ const MapLocation = () => {
     validateOnBlur: true,
     onSubmit: (data) => {
       console.log(data);
-      addPlaceMutation.mutate({
-        ...data,
-        images,
-        hotels: [data?.hotel],
-        country: { province: data?.province, city: data?.city },
-      });
+      if (id) {
+        updataPlaceMutation.mutate({
+          ...data,
+          images,
+          hotels: [data?.hotel],
+          country: { province: data?.province, city: data?.city },
+          _id: id,
+        });
+      } else {
+        addPlaceMutation.mutate({
+          ...data,
+          images,
+          hotels: [data?.hotel],
+          country: { province: data?.province, city: data?.city },
+        });
+      }
     },
   });
 
-  const { values, errors, setFieldValue, handleChange, handleSubmit } = formik;
+  const {
+    values,
+    errors,
+    setFieldValue,
+    handleChange,
+    handleSubmit,
+    resetForm,
+  } = formik;
 
   const handleRemoveImage = (ind) => {
     const filteredImg = images.filter((img, i) => i !== ind);
@@ -122,7 +165,24 @@ const MapLocation = () => {
     }
   };
 
-  console.log(data);
+  const handleEdit = (data) => {
+    console.log(data);
+    setFieldValue("lat", data?.lat);
+    setFieldValue("lng", data?.lng);
+    setFieldValue("name", data?.name);
+    setFieldValue("location", data?.location);
+    setFieldValue("category", data?.category?._id);
+    setFieldValue("province", data?.country?.province?._id);
+    setFieldValue("contact", data?.contact);
+    setFieldValue("city", data?.country?.city);
+    setFieldValue("hotel", data?.hotels[0]?._id);
+    setImages(data?.images);
+    setId(data?._id);
+  };
+
+  const handleDeletePlace = (id) => {
+    deletePlaceMutation.mutate({ _id: id });
+  };
   return (
     <S.MapLocation>
       <AuthLayout showFooter>
@@ -267,23 +327,90 @@ const MapLocation = () => {
           </div>
           <Button
             hasBackground
-            title="Add"
+            title={id ? "Update" : "Add"}
             size="medium"
+            type="submit"
             onClick={handleSubmit}
           />
         </div>
-        <div style={{ display: "flex", padding: "20px" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3,1fr)",
+            gap: "20px",
+            padding: "20px",
+          }}
+        >
           {data?.map((l) => (
-            <div
-              style={{
-                boxShadow: "rgb(0 0 0 / 16%) 0px 0px 3px 0px",
-                padding: "10px",
-              }}
-            >
+            <div className="mapLocationCard">
+              <img
+                className="edit"
+                src={Edit}
+                onClick={() => handleEdit(l)}
+                alt="edit"
+                width={20}
+                height={20}
+              />
+              <img
+                className="delete"
+                src={Delete}
+                onClick={() => handleDeletePlace(l?._id)}
+                alt="delete"
+                width={15}
+                height={15}
+              />
+              <label className="bold">location</label>
               <small>{l?.lat}</small>,<small>{l?.lng}</small>
+              <p>
+                <span className="bold">category:</span> {l?.category?.name}
+              </p>
+              <p>
+                <span className="bold">description: </span>{" "}
+                <p dangerouslySetInnerHTML={{ __html: l?.description }}></p>
+              </p>
+              <p>
+                <span className="bold">country:</span> {l?.country?.name}
+              </p>
+              <p>
+                <span className="bold">province:</span>{" "}
+                {l?.country?.province?.name}
+              </p>
+              <p>
+                <span className="bold">city:</span> {l?.country?.city}
+              </p>
+              <br />
+              <small>
+                <span className="bold">place name: </span>
+                {l?.name}
+              </small>
               <br />
               <br />
-              <small>{l?.name}</small>
+              <h4>Hotel</h4>
+              <div className="hotel">
+                {l?.hotels?.map((h) => (
+                  <div className="hotel-section">
+                    <p>
+                      <span className="bold">hotel name: </span>
+                      {h?.name}
+                    </p>
+                    <p>
+                      <span className="bold">location: </span>
+                      {h?.location}
+                    </p>
+                    <p>
+                      <span className="bold">stars: </span>
+                      {h?.stars}
+                    </p>
+                    <div className="hotel-images">
+                      {h?.images?.map((i) => (
+                        <>
+                          <img src={i?.url} alt="url" width={60} height={60} />
+                        </>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>

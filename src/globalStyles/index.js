@@ -132,6 +132,9 @@ const reset = css`
     font-family: "Poppins-Light";
   }
 
+  .bold {
+    font-weight: bold;
+  }
   * {
     font-family: "Poppins-Light";
   }

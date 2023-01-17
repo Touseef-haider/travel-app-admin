@@ -47,6 +47,16 @@ class ApiService extends BaseService {
     return this.post(`/mapLocation`, data);
   }
 
+  removePlaceInMap(data) {
+    console.log(data);
+    return this.delete(`/mapLocation/${data?._id}`);
+  }
+
+  updatePlaceInMap(data) {
+    console.log("mapLocation api", data);
+    return this.put(`/mapLocation/${data?._id}`, data);
+  }
+
   getMapLocations() {
     return this.get(`/mapLocation`);
   }
