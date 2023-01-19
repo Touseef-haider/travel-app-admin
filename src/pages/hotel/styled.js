@@ -29,8 +29,9 @@ export const Hotel = styled.div`
     cursor: pointer;
   }
   .image-holder .image {
-    width: 100%;
-    object-fit: cover;
+    width: 100px;
+    height: 100px;
+    align-self: center;
   }
   .cat-section {
     display: grid;
