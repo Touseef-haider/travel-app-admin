@@ -1,11 +1,7 @@
 import styled from "styled-components";
 
 export const Home = styled.div`
-  h1 {
-    color: ${({ theme }) => theme.colors.grey};
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
+  padding: 0 30px;
   .album {
     width: 100%;
     padding: 10px;

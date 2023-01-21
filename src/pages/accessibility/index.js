@@ -8,10 +8,12 @@ import { useFormik } from "formik";
 import { useMutation, useQuery } from "react-query";
 import apiService from "../../services/apiService";
 import Button from "../../components/button";
+import Select from "../../components/select";
 import toastify from "../../components/toast";
 
 const initialState = {
   via: "",
+  type: "",
 };
 const Accessibility = () => {
   const [initialValues] = useState(initialState);
@@ -55,6 +57,7 @@ const Accessibility = () => {
   );
   const schema = yup.object({
     via: yup.string().required("*via is required"),
+    type: yup.string().required("*type is required"),
   });
 
   const formik = useFormik({
@@ -102,6 +105,19 @@ const Accessibility = () => {
             name="via"
           />
 
+          <Select
+            options={[
+              { value: "vehicle", item: "vehicle" },
+              { value: "individual", item: "individual" },
+            ]}
+            value={values.type}
+            error={errors.type}
+            onChange={handleChange}
+            name="type"
+            selectOption="select accessiblity"
+            placeholder="select accessiblity for, like: car,females etc"
+          />
+
           <Button
             hasBackground
             onClick={handleSubmit}
@@ -118,12 +134,17 @@ const Accessibility = () => {
                 className="card"
                 onDoubleClick={() => handleRemoveAccessibility(p?._id)}
               >
-                <div>{p?.via}</div>
+                <div>
+                  {p?.type === "vehicle"
+                    ? `accessible via ${p?.via}`
+                    : `accessible for ${p?.via}`}
+                </div>
                 <img
                   src={Edit}
                   onClick={() => handleEdit(p?._id, p?.via)}
                   width={20}
                   height={20}
+                  className="edit"
                   alt="edit"
                 />
               </div>

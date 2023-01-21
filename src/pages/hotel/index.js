@@ -11,11 +11,13 @@ import apiService from "../../services/apiService";
 import Button from "../../components/button";
 import toastify from "../../components/toast";
 import Delete from "../../assets/delete.svg";
+import Quill from "../../components/quill";
 
 const initialState = {
   name: "",
   location: "",
   stars: "",
+  description: "",
 };
 const Hotel = () => {
   const [initialValues] = useState(initialState);
@@ -71,6 +73,7 @@ const Hotel = () => {
   const schema = yup.object({
     name: yup.string().required("*name is required"),
     location: yup.string().required("*location is required"),
+    description: yup.string().required("*description is required"),
     stars: yup.number().required("*stars is required"),
   });
 
@@ -101,9 +104,11 @@ const Hotel = () => {
     removeHotelMutation.mutate({ _id: id });
   };
 
-  const handleEdit = (id, name, location, stars, images) => {
+  const handleEdit = (id, name, location, stars, images, description) => {
     setFieldValue("name", name);
+    console.log(description);
     setFieldValue("location", location);
+    setFieldValue("description", description);
     setFieldValue("stars", stars);
     setImages(images);
     setId(id);
@@ -155,6 +160,13 @@ const Hotel = () => {
             onChange={handleChange}
             name="stars"
           />
+
+          <Quill
+            value={values.description}
+            name="description"
+            onChange={(e) => setFieldValue("description", e)}
+          />
+
           <br />
 
           <input
@@ -213,6 +225,7 @@ const Hotel = () => {
                   <p>{h?.name}</p>
                   <p>{h?.location}</p>
                   <p>{h?.stars}</p>
+                  <p dangerouslySetInnerHTML={{ __html: h?.description }}></p>
                   <div
                     style={{
                       display: "grid",
@@ -239,7 +252,8 @@ const Hotel = () => {
                         h?.name,
                         h?.location,
                         h?.stars,
-                        h?.images
+                        h?.images,
+                        h?.description
                       )
                     }
                     width={20}
