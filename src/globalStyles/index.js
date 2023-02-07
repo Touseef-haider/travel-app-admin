@@ -97,6 +97,8 @@ const reset = css`
   }
   body {
     /* line-height: 1; */
+    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
   }
   img {
     vertical-align: middle;
