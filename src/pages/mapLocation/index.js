@@ -440,7 +440,11 @@ const MapLocation = () => {
                 {l?.accessibilities?.map((h) => (
                   <div className="hotel-section">
                     <p>
-                      <span className="bold">accessible via: </span>
+                      <span className="bold">
+                        {h?.via === "vehicle"
+                          ? "accessible via:"
+                          : "available for:"}
+                      </span>
                       {h?.via}
                     </p>
                   </div>

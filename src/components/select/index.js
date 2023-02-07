@@ -13,7 +13,7 @@ const Select = ({
   selectOption,
 }) => {
   return (
-    <S.Select {...props}>
+    <S.Select {...props} multiple={multiple}>
       <p className="label">{label}</p>
       <select
         name={name}

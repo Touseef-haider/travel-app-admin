@@ -59,9 +59,14 @@ const Home = () => {
                     Category Name:
                   </label>
                   <p>{alert?.category}</p>
-                  {/* {album?.files?.map((el) => (
-                        <img width="300" src={getImage(el?.data)} alt="album" />
-                      ))} */}
+                  <div className="gallery">
+                    {alert?.images?.map((el) => (
+                      <img width="300" src={el} alt="album" />
+                    ))}
+                  </div>
+                  <p>
+                    Added by <b>{alert?.profile?.first_name}</b>
+                  </p>
                   <Button
                     onClick={() => handleActive(alert?._id, alert?.is_active)}
                     title={`${

@@ -8,4 +8,14 @@ export const Home = styled.div`
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1) !important;
     margin: 10px;
   }
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    height: 200px;
+  }
+  .gallery {
+    width: 100%;
+    height: 100%;
+  }
 `;

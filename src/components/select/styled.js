@@ -8,7 +8,7 @@ export const Select = styled.div`
     padding: 0;
     border: 1px solid
       ${({ theme, error }) => (error ? theme.colors.red : theme.colors.grey)};
-    height: 40px;
+    height: ${({ multiple }) => (multiple ? "80px" : "40px")};
   }
 
   select:focus {
