@@ -3,7 +3,7 @@ import BaseService from "./baseService";
 class ApiService extends BaseService {
   // Auth Routes
   login(data) {
-    return this.post("/login", data);
+    return this.post("/login?admin=true", data);
   }
   forgotPassword(data) {
     return this.post("/forgot_password", data);
