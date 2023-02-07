@@ -137,7 +137,7 @@ const Accessibility = () => {
                 <div>
                   {p?.type === "vehicle"
                     ? `accessible via ${p?.via}`
-                    : `accessible for ${p?.via}`}
+                    : `available for ${p?.via}`}
                 </div>
                 <img
                   src={Edit}
